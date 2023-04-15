@@ -19,6 +19,8 @@
         <activity
             android:name=".UploadSongActivity"
             android:exported="false" />
+        <activity android:name=".SongsActivity"
+            android:exported="false"/>
         <activity
             android:name=".MainActivity"
             android:exported="true">

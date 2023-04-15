@@ -1,7 +1,12 @@
 package hcmute.edu.vn.gk_fn_ltdd;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentTransaction;
 
 
 import android.Manifest;
@@ -10,7 +15,6 @@ import android.content.Intent;
 
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +24,7 @@ import android.widget.Toast;
 
 import com.example.jean.jcplayer.model.JcAudio;
 import com.example.jean.jcplayer.view.JcPlayerView;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -34,123 +39,112 @@ import com.karumi.dexter.listener.single.PermissionListener;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import hcmute.edu.vn.gk_fn_ltdd.R;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
     private boolean checkPermission = false;
-    ProgressDialog progressDialog;
-    ListView listView;
-    List<String> songsNameList;
-    List<String> songsUrlList;
-    List<String> songsArtistList;
-    List<String> songsDurationList;
-    ListAdapter adapter;
-    JcPlayerView jcPlayerView;
-    List<JcAudio> jcAudios;
-    List<String> thumbnail;
 
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-//        progressDialog = new ProgressDialog(this);
-//        progressDialog.show();
-//        progressDialog.setMessage("Please Wait...");
-        listView = findViewById(R.id.songsList);
-        songsNameList = new ArrayList<>();
-        songsUrlList = new ArrayList<>();
-        songsArtistList = new ArrayList<>();
-        songsDurationList = new ArrayList<>();
-        jcAudios = new ArrayList<>();
-        thumbnail = new ArrayList<>();
-        jcPlayerView = findViewById(R.id.jcplayer);
-        retrieveSongs();
+        setContentView(R.layout.activity_home);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                ArrayList<String> songNameList = (ArrayList<String>) songsNameList;
-                ArrayList<String> songUrlList = (ArrayList<String>) songsUrlList;
-                ArrayList<String> songArtistList = (ArrayList<String>) songsArtistList;
-                ArrayList<String> songDurationList = (ArrayList<String>) songsDurationList;
-                ArrayList<String> thumbnail1 = (ArrayList<String>) thumbnail;
-                ArrayList<JcAudio> audio = (ArrayList<JcAudio>) jcAudios;
-                startActivity(new Intent(getApplicationContext(), PlayerActivity.class)
-                        .putStringArrayListExtra("songNameList", songNameList)
-                        .putStringArrayListExtra("songsUrlList", songUrlList)
-                        .putStringArrayListExtra("songArtistList", songArtistList)
-                        .putStringArrayListExtra("songsDurationList", songDurationList)
-                        .putStringArrayListExtra("thumbnail", thumbnail1)
-                        .putParcelableArrayListExtra("audio", (ArrayList<? extends Parcelable>) jcAudios)
-                        .putExtra("pos", i));
-                jcPlayerView.playAudio(jcAudios.get(i));
-                jcPlayerView.setVisibility(View.VISIBLE);
-                jcPlayerView.createNotification();
-                adapter.notifyDataSetChanged();
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+
+                if (id == R.id.nav_home) {
+                    // Handle the home action
+                    FragmentHome homeFragment = new FragmentHome();
+                    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.frame_main,homeFragment);
+                    fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+
+                }else if (id == R.id.nav_songs) {
+                    openActivity1();
+
+                }else if (item.getItemId() == R.id.uploadItem){
+                    if (validatePermissions()){
+                        openActivity2();
+
+                    }
+                }
+
+                DrawerLayout drawer = findViewById(R.id.drawer_layout);
+                drawer.closeDrawer(GravityCompat.START);
+                return true;
             }
         });
+
     }
 
-    // RETRIEVING THE SONGS FROM THE SERVER
-    public void retrieveSongs() {
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Songs");
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                songsNameList.clear();
-                songsUrlList.clear();
-                songsArtistList.clear();
-                songsDurationList.clear();
-                thumbnail.clear();
-                jcAudios.clear();
-                for (DataSnapshot ds : snapshot.getChildren()) {
-                    Song song = ds.getValue(Song.class);
-                    songsNameList.add(song.getSongName());
-                    songsUrlList.add(song.getSongUrl());
-                    songsArtistList.add(song.getSongArtist());
-                    songsDurationList.add(song.getSongDuration());
-                    thumbnail.add(song.getImageUrl());
+    public void openActivity1(){
+        Intent intent = new Intent(this, SongsActivity.class);
+        startActivity(intent);
+    }
 
-                    jcAudios.add(JcAudio.createFromURL(song.getSongName(), song.getSongUrl()));
-                }
-                ;
-                adapter = new ListAdapter(getApplicationContext(), songsNameList, thumbnail, songsArtistList, songsDurationList);
-
-                jcPlayerView.initPlaylist(jcAudios, null);
-                listView.setAdapter(adapter);
-
-
-                adapter.notifyDataSetChanged();
-                //progressDialog.dismiss();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(MainActivity.this, "FAILED!", Toast.LENGTH_SHORT).show();
-            }
-        });
+    public void openActivity2(){
+        Intent intent1 = new Intent(this, UploadSongActivity.class);
+        startActivity(intent1);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.app_menu, menu);
+        getMenuInflater().inflate(R.menu.app_menu,menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.uploadItem) {
-            if (validatePermissions()) {
-                Intent intent = new Intent(this, UploadSongActivity.class);
-                startActivity(intent);
+        int id = item.getItemId();
+
+        if (id == R.id.nav_home) {
+            // Handle the home action
+            FragmentHome homeFragment = new FragmentHome();
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.frame_main,homeFragment);
+            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+
+        }else if (id == R.id.nav_songs) {
+            openActivity1();
+
+        }else if (item.getItemId() == R.id.uploadItem){
+            if (validatePermissions()){
+                openActivity2();
+
             }
         }
         return super.onOptionsItemSelected(item);
     }
 
+
+    //over ridding back press button
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        }
+        else {
+            super.onBackPressed();
+        }
+    }
+
     // METHOD TO HANDEL RUNTIME PERMISSIONS
-    private boolean validatePermissions() {
+    private boolean validatePermissions(){
         Dexter.withContext(getApplicationContext())
                 .withPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
                 .withListener(new PermissionListener() {
@@ -158,12 +152,10 @@ public class MainActivity extends AppCompatActivity {
                     public void onPermissionGranted(PermissionGrantedResponse permissionGrantedResponse) {
                         checkPermission = true;
                     }
-
                     @Override
                     public void onPermissionDenied(PermissionDeniedResponse permissionDeniedResponse) {
                         checkPermission = false;
                     }
-
                     @Override
                     public void onPermissionRationaleShouldBeShown(PermissionRequest permissionRequest, PermissionToken permissionToken) {
                         permissionToken.continuePermissionRequest();
@@ -172,4 +164,9 @@ public class MainActivity extends AppCompatActivity {
         return checkPermission;
 
     }
+
+    public void setActionBarTitle(String title) {
+        Objects.requireNonNull(getSupportActionBar()).setTitle(title);
+    }
+
 }

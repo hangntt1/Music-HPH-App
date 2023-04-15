@@ -1,10 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
 
-    <item android:id="@+id/uploadItem"
-        android:title="uploadSong"
-        app:showAsAction="always"
-        android:icon="@drawable/ic_baseline_cloud_upload_24"/>
 
+    <group android:id="@+id/group_main" android:checkableBehavior="single">
+        <item android:id="@+id/uploadItem"
+            android:title="uploadSong"
+            android:icon="@drawable/ic_baseline_cloud_upload_24"/>
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_menu_home"
+            android:title="Home" />
+        <item
+            android:id="@+id/nav_songs"
+            android:icon="@drawable/ic_menu_songs"
+            android:title="Songs" />
+        <item
+            android:id="@+id/nav_artists"
+            android:icon="@drawable/ic_menu_artists"
+            android:title="Artists" />
+    </group>
 </menu>
