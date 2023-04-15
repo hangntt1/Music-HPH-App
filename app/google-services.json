@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "839147746657",
+    "firebase_url": "https://gk-fn-ltdd-default-rtdb.firebaseio.com",
+    "project_id": "gk-fn-ltdd",
+    "storage_bucket": "gk-fn-ltdd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:839147746657:android:2bef1894a6928a9bdc0120",
+        "android_client_info": {
+          "package_name": "hcmute.edu.vn.gk_fn_ltdd"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "839147746657-lt1vorpo1o0roc7nsva4acdb0m8qq6ta.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAsEbc_LFsWKwA33l6OkP_VOGigISP6HSI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "839147746657-lt1vorpo1o0roc7nsva4acdb0m8qq6ta.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
