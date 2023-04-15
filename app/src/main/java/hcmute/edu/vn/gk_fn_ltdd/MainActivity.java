@@ -9,6 +9,8 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,6 +31,7 @@ import com.karumi.dexter.listener.PermissionDeniedResponse;
 import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,6 +70,20 @@ public class MainActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                ArrayList<String> songNameList = (ArrayList<String>) songsNameList;
+                ArrayList<String> songUrlList = (ArrayList<String>) songsUrlList;
+                ArrayList<String> songArtistList = (ArrayList<String>) songsArtistList;
+                ArrayList<String> songDurationList = (ArrayList<String>) songsDurationList;
+                ArrayList<String> thumbnail1 = (ArrayList<String>) thumbnail;
+                ArrayList<JcAudio> audio = (ArrayList<JcAudio>) jcAudios;
+                startActivity(new Intent(getApplicationContext(), PlayerActivity.class)
+                        .putStringArrayListExtra("songNameList", songNameList)
+                        .putStringArrayListExtra("songsUrlList", songUrlList)
+                        .putStringArrayListExtra("songArtistList", songArtistList)
+                        .putStringArrayListExtra("songsDurationList", songDurationList)
+                        .putStringArrayListExtra("thumbnail", thumbnail1)
+                        .putParcelableArrayListExtra("audio", (ArrayList<? extends Parcelable>) jcAudios)
+                        .putExtra("pos", i));
                 jcPlayerView.playAudio(jcAudios.get(i));
                 jcPlayerView.setVisibility(View.VISIBLE);
                 jcPlayerView.createNotification();
@@ -81,6 +98,12 @@ public class MainActivity extends AppCompatActivity {
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                songsNameList.clear();
+                songsUrlList.clear();
+                songsArtistList.clear();
+                songsDurationList.clear();
+                thumbnail.clear();
+                jcAudios.clear();
                 for (DataSnapshot ds : snapshot.getChildren()) {
                     Song song = ds.getValue(Song.class);
                     songsNameList.add(song.getSongName());
@@ -91,12 +114,17 @@ public class MainActivity extends AppCompatActivity {
 
                     jcAudios.add(JcAudio.createFromURL(song.getSongName(), song.getSongUrl()));
                 }
+                ;
                 adapter = new ListAdapter(getApplicationContext(), songsNameList, thumbnail, songsArtistList, songsDurationList);
+
                 jcPlayerView.initPlaylist(jcAudios, null);
                 listView.setAdapter(adapter);
+
+
                 adapter.notifyDataSetChanged();
                 //progressDialog.dismiss();
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Toast.makeText(MainActivity.this, "FAILED!", Toast.LENGTH_SHORT).show();
@@ -106,15 +134,15 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.app_menu,menu);
+        getMenuInflater().inflate(R.menu.app_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.uploadItem){
-            if (validatePermissions()){
-                Intent intent = new Intent(this,UploadSongActivity.class);
+        if (item.getItemId() == R.id.uploadItem) {
+            if (validatePermissions()) {
+                Intent intent = new Intent(this, UploadSongActivity.class);
                 startActivity(intent);
             }
         }
@@ -122,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // METHOD TO HANDEL RUNTIME PERMISSIONS
-    private boolean validatePermissions(){
+    private boolean validatePermissions() {
         Dexter.withContext(getApplicationContext())
                 .withPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
                 .withListener(new PermissionListener() {
@@ -130,10 +158,12 @@ public class MainActivity extends AppCompatActivity {
                     public void onPermissionGranted(PermissionGrantedResponse permissionGrantedResponse) {
                         checkPermission = true;
                     }
+
                     @Override
                     public void onPermissionDenied(PermissionDeniedResponse permissionDeniedResponse) {
                         checkPermission = false;
                     }
+
                     @Override
                     public void onPermissionRationaleShouldBeShown(PermissionRequest permissionRequest, PermissionToken permissionToken) {
                         permissionToken.continuePermissionRequest();
