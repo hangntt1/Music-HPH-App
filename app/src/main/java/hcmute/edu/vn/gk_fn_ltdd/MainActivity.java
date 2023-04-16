@@ -64,12 +64,13 @@ public class MainActivity extends AppCompatActivity {
 
                 if (id == R.id.nav_home) {
                     // Handle the home action
-                    FragmentHome homeFragment = new FragmentHome();
-                    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.frame_main,homeFragment);
-                    fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-                    fragmentTransaction.addToBackStack(null);
-                    fragmentTransaction.commit();
+//                    FragmentHome homeFragment = new FragmentHome();
+//                    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+//                    fragmentTransaction.replace(R.id.frame_main,homeFragment);
+//                    fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+//                    fragmentTransaction.addToBackStack(null);
+//                    fragmentTransaction.commit();
+                    openActivity3();
 
                 }else if (id == R.id.nav_songs) {
                     openActivity1();
@@ -98,7 +99,10 @@ public class MainActivity extends AppCompatActivity {
         Intent intent1 = new Intent(this, UploadSongActivity.class);
         startActivity(intent1);
     }
-
+    public void openActivity3(){
+        Intent intent = new Intent(this, HomeActivity.class);
+        startActivity(intent);
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.app_menu,menu);

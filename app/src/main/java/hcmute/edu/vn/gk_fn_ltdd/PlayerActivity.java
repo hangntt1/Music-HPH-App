@@ -23,15 +23,9 @@ import java.util.List;
 import com.squareup.picasso.Picasso;
 public class PlayerActivity extends AppCompatActivity {
 
-    ImageButton btnPlay, btnNext, btnPrev,btnShuffer, btnRepeat;
-    TextView txtSong, txtAlbum, txtArtist;
-    SeekBar seekBar;
+    TextView  txtAlbum, txtArtist;
     ImageView imageView;
-    String songName;
-    int position;
-    ArrayList<File> song;
     JcPlayerView jcPlayerView;
-    ListAdapter adapter;
     ListView listView;
 
     @Override
@@ -40,11 +34,6 @@ public class PlayerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_player);
 
-//        btnNext = findViewById(R.id.next);
-//        btnPlay = findViewById(R.id.play);
-//        btnPrev = findViewById(R.id.previous);
-//        btnShuffer = findViewById(R.id.shuffle);
-//        btnRepeat = findViewById(R.id.repeat);
 //
 //        txtSong = findViewById(R.id.song);
         txtAlbum = findViewById(R.id.album);
@@ -71,9 +60,6 @@ public class PlayerActivity extends AppCompatActivity {
         jcPlayerView.initPlaylist(jcAudios, null);
         jcPlayerView.playAudio(jcAudios.get(i));
         jcPlayerView.setVisibility(View.VISIBLE);
-//        jcPlayerView.createNotification();
-
-//        adapter.notifyDataSetChanged();
 
 
 
