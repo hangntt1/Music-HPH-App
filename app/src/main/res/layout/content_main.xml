@@ -14,5 +14,23 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/frame_main">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:gravity="center_horizontal"
+            android:text="WELCOME TO OUR MUSIC APP"
+            android:textColor="#3F51B5"
+            android:textSize="40sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingLeft="20dp"
+            android:paddingTop="20dp"
+            android:paddingRight="20dp"
+            app:srcCompat="@drawable/icon" />
     </FrameLayout>
 </LinearLayout>

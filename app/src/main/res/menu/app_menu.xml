@@ -16,9 +16,5 @@
             android:id="@+id/nav_songs"
             android:icon="@drawable/ic_menu_songs"
             android:title="Songs" />
-        <item
-            android:id="@+id/nav_artists"
-            android:icon="@drawable/ic_menu_artists"
-            android:title="Artists" />
     </group>
 </menu>
