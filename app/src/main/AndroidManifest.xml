@@ -14,13 +14,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Gk_fn">
         <activity
+            android:name=".HomeActivity"
+            android:exported="false" />
+        <activity
             android:name=".PlayerActivity"
             android:exported="false" />
         <activity
             android:name=".UploadSongActivity"
             android:exported="false" />
-        <activity android:name=".SongsActivity"
-            android:exported="false"/>
+        <activity
+            android:name=".SongsActivity"
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
