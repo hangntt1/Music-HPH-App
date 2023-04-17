@@ -22,7 +22,7 @@
         android:id="@+id/jcplayer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="#3BF6C1"
+        android:background="#9F6BFA"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
