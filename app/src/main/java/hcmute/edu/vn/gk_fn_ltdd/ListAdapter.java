@@ -24,6 +24,8 @@ public class ListAdapter extends BaseAdapter {
     List<String> songArtist;
     List<String> songDuration;
     Context context;
+
+
     public ListAdapter(Context context, List<String> songNames, List<String> thumbnails, List<String> songArtist, List<String> songDuration) {
         this.context = context;
         this.songNames = songNames;

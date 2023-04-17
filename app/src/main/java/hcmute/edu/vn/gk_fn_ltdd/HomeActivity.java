@@ -31,8 +31,9 @@ public class HomeActivity extends AppCompatActivity {
     List<String> songsUrlList;
     List<String> songsArtistList;
     List<String> songsDurationList;
-
+    List<JcAudio> jcAudios;
     List<String> thumbnail;
+    JcPlayerView jcPlayerView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +46,8 @@ public class HomeActivity extends AppCompatActivity {
         songsArtistList = new ArrayList<>();
         songsDurationList = new ArrayList<>();
         thumbnail = new ArrayList<>();
-
+        jcAudios = new ArrayList<>();
+        jcPlayerView = findViewById(R.id.jcplayerCard);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3);
         recyclerView.setLayoutManager(gridLayoutManager);
         retrieveSongs();
@@ -64,9 +66,12 @@ public class HomeActivity extends AppCompatActivity {
                     songsArtistList.add(song.getSongArtist());
                     songsDurationList.add(song.getSongDuration());
                     thumbnail.add(song.getImageUrl());
+                    jcAudios.add(JcAudio.createFromURL(song.getSongName(), song.getSongUrl()));
+
 
                 }
-                adapter = new GridAdapter(getApplicationContext(), songsNameList, thumbnail);
+                jcPlayerView.initPlaylist(jcAudios, null);
+                adapter = new GridAdapter(songsNameList, thumbnail,songsArtistList,songsDurationList, getApplicationContext(),jcPlayerView, jcAudios);
                 recyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
                 //progressDialog.dismiss();
