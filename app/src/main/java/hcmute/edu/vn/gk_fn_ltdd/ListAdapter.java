@@ -86,7 +86,6 @@ public class ListAdapter extends BaseAdapter {
             artistName = view.findViewById(R.id.artistName);
             songDuration = view.findViewById(R.id.songDuration);
             cardView = view.findViewById(R.id.cardView);
-            currentlyPlaying = view.findViewById(R.id.currentlyPlaying);
         }
     }
 }

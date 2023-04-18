@@ -63,13 +63,6 @@ public class MainActivity extends AppCompatActivity {
                 int id = item.getItemId();
 
                 if (id == R.id.nav_home) {
-                    // Handle the home action
-//                    FragmentHome homeFragment = new FragmentHome();
-//                    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-//                    fragmentTransaction.replace(R.id.frame_main,homeFragment);
-//                    fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-//                    fragmentTransaction.addToBackStack(null);
-//                    fragmentTransaction.commit();
                     openActivity3();
 
                 }else if (id == R.id.nav_songs) {
@@ -109,31 +102,6 @@ public class MainActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.nav_home) {
-            // Handle the home action
-            FragmentHome homeFragment = new FragmentHome();
-            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.frame_main,homeFragment);
-            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-            fragmentTransaction.addToBackStack(null);
-            fragmentTransaction.commit();
-
-        }else if (id == R.id.nav_songs) {
-            openActivity1();
-
-        }else if (item.getItemId() == R.id.uploadItem){
-            if (validatePermissions()){
-                openActivity2();
-
-            }
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
 
     //over ridding back press button
     @Override
@@ -167,10 +135,6 @@ public class MainActivity extends AppCompatActivity {
                 }).check();
         return checkPermission;
 
-    }
-
-    public void setActionBarTitle(String title) {
-        Objects.requireNonNull(getSupportActionBar()).setTitle(title);
     }
 
 }
